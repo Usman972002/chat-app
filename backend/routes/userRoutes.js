@@ -1,6 +1,6 @@
 const express = require("express");
 const user = require("../models/userModel");
-const { generateToken } = require("../jwt");
+const { generateToken, jwtMiddleWare } = require("../jwt");
 const router = express.Router();
 
 router.post("/signup", async (req, res) => {
@@ -71,5 +71,21 @@ router.post("/logout", (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+router.get('/',jwtMiddleWare,async(req,res)=>{
+  try{
+    const loggedInUser = req.user.userId;
+    // this is for rest of the users not including ourself
+    const allusers = await user.find({_id : {$ne : loggedInUser}});
+    // This is Inclusing Ourself
+    // const allusers = await user.find();
+
+    res.status(200).json(allusers);
+
+  }catch(err){
+    console.log("Error in Fetching Users", err.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+})
 
 module.exports = router;
