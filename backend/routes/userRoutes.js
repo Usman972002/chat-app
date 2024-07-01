@@ -31,8 +31,8 @@ router.post("/signup", async (req, res) => {
     generateToken(newUser._id, res);
     await newUser.save();
     res.status(201).json({ newUser });
-  } catch (err) {
-    console.log("Error in Signup", err.message);
+  } catch (error) {
+    console.log("Error in Signup", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -44,18 +44,18 @@ router.post("/login", async (req, res) => {
     const userInDb = await user.findOne({ username });
 
     if (!userInDb) {
-      res.status(401).json({ message: "Invalid User" });
+      res.status(401).json({ error: "Invalid User" });
     } else {
       const passwordMatch = await userInDb.comparePassword(password);
       if (!passwordMatch) {
-        res.status(401).json({ message: "Invalid Password" });
+        res.status(401).json({ error: "Invalid Password" });
       } else {
         generateToken(userInDb._id, res);
         res.status(200).json(userInDb);
       }
     }
-  } catch (err) {
-    console.log("Error in Login", err.message);
+  } catch (error) {
+    console.log("Error in Login", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -66,8 +66,8 @@ router.post("/logout", (req, res) => {
       maxAge:0
     });
     res.status(200).json({message:"Logged Out Successfully"})
-  }catch(err){
-    console.log("Error in Logout", err.message);
+  }catch(error){
+    console.log("Error in Logout", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
