@@ -26,14 +26,14 @@ router.post("/send/:receiverId", async (req, res) => {
     });
 
     if (newMessage) {
-        conversationOfUsers.messages.push(newMessage._id);
+      conversationOfUsers.messages.push(newMessage._id);
     }
 
     await Promise.all([conversationOfUsers.save(), newMessage.save()]);
 
     res.status(201).json(newMessage);
-  } catch (err) {
-    console.log("Error in Sending Message", err.message);
+  } catch (error) {
+    console.log("Error in Sending Message", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -48,10 +48,10 @@ router.get("/:receiverId", async (req, res) => {
         participants: { $all: [senderId, receiverId] },
       })
       .populate("messages");
-
+    if (!conversationOfUsers) return res.status(200).json([]);
     res.status(200).json(conversationOfUsers.messages);
-  } catch (err) {
-    console.log("Error in Getting Message", err.message);
+  } catch (error) {
+    console.log("Error in Getting Message", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });

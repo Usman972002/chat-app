@@ -1,5 +1,4 @@
 const express = require('express');
-const cors = require('cors');
 const dotenv = require('dotenv');
 const db = require('./db');
 const cookieParser = require('cookie-parser');
@@ -11,7 +10,6 @@ const {jwtMiddleWare} = require('./jwt');
 dotenv.config();
 const app = express();
 
-app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 

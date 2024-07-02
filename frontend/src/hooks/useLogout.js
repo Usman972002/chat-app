@@ -6,12 +6,10 @@ const useLogout = () => {
   const [loading, setLoading] = useState(false);
   const { setAuthUser } = useAuthContext();
 
-  const BASEURL = import.meta.env.VITE_REACT_APP_BASEURL;
-
   const logout = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${BASEURL}/user/logout`, {
+      const response = await fetch(`/api/user/logout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
