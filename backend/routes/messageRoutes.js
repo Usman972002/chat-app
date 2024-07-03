@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const conversation = require("../models/conversationModel");
 const message = require("../models/messageModel");
+const {getReceiverSocketId ,io} = require('../socket/socket')
 
 router.post("/send/:receiverId", async (req, res) => {
   try {
@@ -30,6 +31,13 @@ router.post("/send/:receiverId", async (req, res) => {
     }
 
     await Promise.all([conversationOfUsers.save(), newMessage.save()]);
+    // SOCKET IO FUNCTIONALITY WILL GO HERE
+		const receiverSocketId = getReceiverSocketId(receiverId);
+		if (receiverSocketId) {
+			// io.to(<socket_id>).emit() used to send events to specific client
+			io.to(receiverSocketId).emit("newMessage", newMessage);
+		}
+
 
     res.status(201).json(newMessage);
   } catch (error) {

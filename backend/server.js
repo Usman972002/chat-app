@@ -6,9 +6,9 @@ const userRouter = require('./routes/userRoutes');
 const messageRouter = require('./routes/messageRoutes');
 const PORT = process.env.PORT || 3001
 const {jwtMiddleWare} = require('./jwt');
+const {app,server} = require('./socket/socket.js');
 
 dotenv.config();
-const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
@@ -16,6 +16,6 @@ app.use(cookieParser());
 app.use('/user',userRouter);
 app.use('/messages',jwtMiddleWare,messageRouter);
 
-app.listen(PORT,()=>{
+server.listen(PORT,()=>{
     console.log(`Server Running On Port ${PORT}`)
 })
