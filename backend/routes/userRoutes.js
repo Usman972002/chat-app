@@ -30,7 +30,7 @@ router.post("/signup", async (req, res) => {
 
     generateToken(newUser._id, res);
     await newUser.save();
-    res.status(201).json({ newUser });
+    res.status(201).json(newUser);
   } catch (error) {
     console.log("Error in Signup", error.message);
     res.status(500).json({ error: "Internal Server Error" });
